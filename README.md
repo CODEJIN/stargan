@@ -5,6 +5,8 @@ for Multi-Domain Image-to-Image Translation'. The algorithm is based on the foll
 
     Choi, Y., Choi, M., Kim, M., Ha, J. W., Kim, S., & Choo, J. (2018). Stargan: Unified generative adversarial networks for multi-domain image-to-image translation. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 8789-8797).
     
+※ This code is a minor fix version from 'https://github.com/CODEJIN/GAN/tree/master/StarGAN'.
+    
 # Structrue
 ![Picture1](https://user-images.githubusercontent.com/17133841/61397795-aba93800-a898-11e9-921f-557ba4680e67.png)
 
