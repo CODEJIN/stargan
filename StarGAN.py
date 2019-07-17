@@ -9,38 +9,39 @@ import matplotlib.pyplot as plt;
 import matplotlib.gridspec as gridspec;
 from Customized_Layers import *;
 from Pattern_Feeder import Pattern_Feeder;
+import Hyper_Parameters as hp
 
 class StarGAN:
     def __init__(
         self,        
-        attribute_File_Path = "D:/Simulation_Raw_Data/CelebA/list_attr_celeba.txt",
-        image_Files_Dir = "D:/Simulation_Raw_Data/CelebA/img",
+        attribute_File_Path = None,
+        image_Files_Dir = None,
         select_Attribute_List = None,
-        image_Size = 128,
-        initial_Filter_Count = 64,
-        batch_Size = 16,        
-        gan_Loss_Type = "WGAN", #"GAN", "LSGAN"        
-        learning_Rate = 0.0001,
-        extract_Dir = "D:/GAN_Result/StarGAN"
+        image_Size = None,
+        initial_Filter_Count = None,
+        batch_Size = None,
+        gan_Loss_Type = None,
+        learning_Rate = None,
+        extract_Dir = None,
         ):
 
         self.tf_Session = tf.Session();
 
         self.pattern_Feeder = Pattern_Feeder(
-            attribute_File_Path = attribute_File_Path,
-            image_Files_Dir = image_Files_Dir,
-            select_Attribute_List = select_Attribute_List,
-            image_Size = image_Size,
-            batch_Size = batch_Size,
+            attribute_File_Path = attribute_File_Path or hp.attribute_File_Path,
+            image_Files_Dir = image_Files_Dir or hp.image_Files_Dir,
+            select_Attribute_List = select_Attribute_List or hp.select_Attribute_List,
+            image_Size = image_Size or hp.image_Size,
+            batch_Size = batch_Size or hp.batch_Size,
             max_Queue = 100
             )
 
         self.select_Attribute_List = self.pattern_Feeder.select_Attribute_List;
-        self.image_Size = image_Size;
-        self.initial_Filter_Count = initial_Filter_Count;
-        self.gan_Loss_Type = gan_Loss_Type;
-        self.learning_Rate = learning_Rate;
-        self.extract_Dir = extract_Dir;
+        self.image_Size = image_Size or hp.image_Size;
+        self.initial_Filter_Count = initial_Filter_Count or hp.initial_Filter_Count;
+        self.gan_Loss_Type = gan_Loss_Type or hp.gan_Loss_Type;
+        self.learning_Rate = learning_Rate or hp.learning_Rate;
+        self.extract_Dir = extract_Dir or hp.extract_Dir;
 
         self.Tensor_Generate();
         self.tf_Saver = tf.train.Saver();
@@ -271,7 +272,7 @@ class StarGAN:
 
         if export_File_Name is None:
             export_File_Name = "Step_{}.png".format(global_Step);
-        elif not export_File_Name.lower().endswith(".png", ".jpg", ".jpeg"):
+        elif all([not export_File_Name.lower().endswith(x) for x in [".png", ".jpg", ".jpeg"]]):
             export_File_Name += ".png";
 
 
@@ -303,19 +304,7 @@ class StarGAN:
 
 
 if __name__ == "__main__":
-    import Hyper_Parameters as hp
-
-    new_StarGAN = StarGAN(
-        attribute_File_Path = hp.attribute_File_Path,
-        image_Files_Dir = hp.image_Files_Dir,
-        select_Attribute_List = hp.select_Attribute_List,
-        image_Size = hp.image_Size,
-        initial_Filter_Count = hp.initial_Filter_Count,
-        batch_Size = hp.batch_Size,
-        gan_Loss_Type = hp.gan_Loss_Type,
-        learning_Rate = hp.learning_Rate,
-        extract_Dir = hp.extract_Dir
-        );
+    new_StarGAN = StarGAN();
     new_StarGAN.Restore();
 
     new_StarGAN.Train(
@@ -337,3 +326,15 @@ if __name__ == "__main__":
     #        np.array([0, 1, 0, 0, 1, 0]),
     #        ]
     #    )
+    file_Name_List=[
+        'D:/Work&Study/Visiting Scholarship/Photo.jpg'
+        ]
+
+    attribute_Pattern_List=[
+        np.array([1, 0, 0, 1, 0, 0]),
+        np.array([0, 1, 0, 1, 0, 0]),
+        np.array([0, 0, 1, 1, 0, 0]),
+        np.array([1, 0, 0, 0, 0, 0]),
+        np.array([1, 0, 0, 0, 1, 0]),
+        np.array([0, 1, 0, 0, 1, 0])
+        ]
